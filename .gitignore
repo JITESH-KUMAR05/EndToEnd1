@@ -8,3 +8,7 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Log files (but keep the logs directory structure)
+logs/*.log
+logs/**/*.log
