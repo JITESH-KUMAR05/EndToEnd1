@@ -4,15 +4,24 @@ version = "0.1.0"
 description = "This is my first End to end project in ml"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "ipykernel>=6.29.5",
+    "numpy>=2.3.1",
+    "pandas>=2.3.0",
+    "scikit-learn>=1.7.0",
+    "seaborn>=0.13.2",
+]
 
 [dependency-groups]
 dev = [
+    "catboost>=1.2.8",
     "endtoendmlproject",
     "ipykernel>=6.29.5",
     "numpy>=2.3.1",
     "pandas>=2.3.0",
+    "scikit-learn>=1.7.0",
     "seaborn>=0.13.2",
+    "xgboost>=3.0.2",
 ]
 
 [tool.uv.sources]

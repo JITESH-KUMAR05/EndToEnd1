@@ -3,5 +3,7 @@ pandas
 numpy
 seaborn
 ipykernel
-
+scikit-learn
+catboost
+xgboost
 # -e .
