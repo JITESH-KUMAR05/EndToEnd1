@@ -7,7 +7,7 @@ wheels/
 *.egg-info
 
 
-artifacts
+# artifacts
 
 # Virtual environments
 .venv
