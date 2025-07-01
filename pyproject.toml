@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "catboost>=1.2.8",
+    "dill>=0.4.0",
     "ipykernel>=6.29.5",
     "numpy>=2.3.1",
     "pandas>=2.3.0",
@@ -17,6 +18,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "catboost>=1.2.8",
+    "dill>=0.4.0",
     "endtoendmlproject",
     "ipykernel>=6.29.5",
     "numpy>=2.3.1",
