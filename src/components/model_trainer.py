@@ -49,17 +49,48 @@ class ModelTrainer:
             )
             
             models = {
-                "Random Forest":RandomForestRegressor(),
-                "Decision Tree":DecisionTreeRegressor(),
-                "Gradient Boosting":GradientBoostingRegressor(),
-                "Linear Regression":LinearRegression(),
-                "K-Neighbour Regressor":KNeighborsRegressor(),
-                "CatBoostRegressor":CatBoostRegressor(),
-                "Adaboost Regressor":AdaBoostRegressor(),
-                "XG Boost Regressor":XGBRegressor()
-            }
+            "Decision Tree": DecisionTreeRegressor(),  # ← Moved to first position
+            "Random Forest": RandomForestRegressor(),
+            "Gradient Boosting": GradientBoostingRegressor(),
+            "Linear Regression": LinearRegression(),
+            "K-Neighbour Regressor": KNeighborsRegressor(),
+            "CatBoostRegressor": CatBoostRegressor(verbose=False),
+            "Adaboost Regressor": AdaBoostRegressor(),
+            "XG Boost Regressor": XGBRegressor()
+        }
 
-            model_report:dict=evaluate_models(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,models=models)
+            params = {
+            "Decision Tree": {  # ← Now matches the order in models
+                'criterion': ['squared_error', 'friedman_mse', 'absolute_error'],
+                'max_depth': [3, 5, 7, 10],
+                'min_samples_split': [2, 5, 10]
+            },
+            "Random Forest": {
+                'n_estimators': [8, 16, 32, 64, 128, 256]
+            },
+            "Gradient Boosting": {
+                'learning_rate': [.1, .01, .05, .001],
+                'n_estimators': [8, 16, 32, 64, 128, 256]
+            },
+            "Linear Regression": {},
+            "K-Neighbour Regressor": {
+                'n_neighbors': [5, 7, 9, 11],
+            },
+            "CatBoostRegressor": {
+                'depth': [6, 8, 10],
+                'iterations': [30, 50, 100]
+            },
+            "Adaboost Regressor": {
+                'learning_rate': [.1, .01, 0.5, .001],
+                'n_estimators': [8, 16, 32, 64, 128, 256]
+            },
+            "XG Boost Regressor": {
+                'learning_rate': [.1, .01, .05, .001],
+                'n_estimators': [8, 16, 32, 64, 128, 256]
+            }
+        }
+
+            model_report:dict=evaluate_models(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,models=models,params=params)
 
             ## getting the best model score from the dict
             best_model_score=max(sorted(model_report.values()))
