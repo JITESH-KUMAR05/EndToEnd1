@@ -15,7 +15,8 @@ class PredictPipeline:
             model=load_object(file_path=model_path)
             preprocessor=load_object(file_path=preprocessor_path)
             data_scaled=preprocessor.transform(features)
-            preds=model.predict(data_scaled)
+            if hasattr(model,'get_params'):
+                preds=model.predict(data_scaled)
             rounded_preds=[round(pred,2) for pred in preds]
             return rounded_preds
         except Exception as e:

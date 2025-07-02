@@ -1,0 +1,35 @@
+Jul  2 16:34:45 ip-172-31-11-28 crond[1601]: (CRON) STARTUP (1.5.7)
+Jul  2 16:34:45 ip-172-31-11-28 crond[1601]: (CRON) INFO (Syslog will be used instead of sendmail.)
+Jul  2 16:34:45 ip-172-31-11-28 crond[1601]: (CRON) INFO (RANDOM_DELAY will be scaled with factor 37% if used.)
+Jul  2 16:34:45 ip-172-31-11-28 crond[1601]: (CRON) INFO (running with inotify support)
+Jul  2 16:50:01 ip-172-31-81-32 CROND[2659]: (root) CMD (/opt/elasticbeanstalk/bin/publishlogs -type publish)
+Jul  2 16:50:01 ip-172-31-81-32 CROND[2658]: (root) CMDEND (/opt/elasticbeanstalk/bin/publishlogs -type publish)
+Jul  2 17:01:01 ip-172-31-81-32 CROND[3080]: (root) CMD (run-parts /etc/cron.hourly)
+Jul  2 17:01:01 ip-172-31-81-32 run-parts[3080]: (/etc/cron.hourly) starting 0anacron
+Jul  2 17:01:01 ip-172-31-81-32 anacron[3091]: Anacron started on 2025-07-02
+Jul  2 17:01:01 ip-172-31-81-32 anacron[3091]: Will run job `cron.daily' in 27 min.
+Jul  2 17:01:01 ip-172-31-81-32 anacron[3091]: Will run job `cron.weekly' in 47 min.
+Jul  2 17:01:01 ip-172-31-81-32 anacron[3091]: Will run job `cron.monthly' in 67 min.
+Jul  2 17:01:01 ip-172-31-81-32 anacron[3091]: Jobs will be executed sequentially
+Jul  2 17:01:01 ip-172-31-81-32 run-parts[3080]: (/etc/cron.hourly) finished 0anacron
+Jul  2 17:01:01 ip-172-31-81-32 run-parts[3080]: (/etc/cron.hourly) starting cron.logcleanup.elasticbeanstalk.healthd-proxy.conf
+Jul  2 17:01:01 ip-172-31-81-32 run-parts[3080]: (/etc/cron.hourly) finished cron.logcleanup.elasticbeanstalk.healthd-proxy.conf
+Jul  2 17:01:01 ip-172-31-81-32 run-parts[3080]: (/etc/cron.hourly) starting cron.logrotate.elasticbeanstalk.eb-engine.conf
+Jul  2 17:01:01 ip-172-31-81-32 run-parts[3080]: (/etc/cron.hourly) finished cron.logrotate.elasticbeanstalk.eb-engine.conf
+Jul  2 17:01:02 ip-172-31-81-32 run-parts[3080]: (/etc/cron.hourly) starting cron.logrotate.elasticbeanstalk.eb-hooks.conf
+Jul  2 17:01:02 ip-172-31-81-32 run-parts[3080]: (/etc/cron.hourly) finished cron.logrotate.elasticbeanstalk.eb-hooks.conf
+Jul  2 17:01:02 ip-172-31-81-32 run-parts[3080]: (/etc/cron.hourly) starting cron.logrotate.elasticbeanstalk.healthd.conf
+Jul  2 17:01:02 ip-172-31-81-32 run-parts[3080]: (/etc/cron.hourly) finished cron.logrotate.elasticbeanstalk.healthd.conf
+Jul  2 17:01:02 ip-172-31-81-32 run-parts[3080]: (/etc/cron.hourly) starting cron.logrotate.elasticbeanstalk.nginx.conf
+Jul  2 17:01:02 ip-172-31-81-32 run-parts[3080]: (/etc/cron.hourly) finished cron.logrotate.elasticbeanstalk.nginx.conf
+Jul  2 17:01:02 ip-172-31-81-32 run-parts[3080]: (/etc/cron.hourly) starting cron.logrotate.elasticbeanstalk.web-stderr.conf
+Jul  2 17:01:02 ip-172-31-81-32 run-parts[3080]: (/etc/cron.hourly) finished cron.logrotate.elasticbeanstalk.web-stderr.conf
+Jul  2 17:01:02 ip-172-31-81-32 run-parts[3080]: (/etc/cron.hourly) starting cron.logrotate.elasticbeanstalk.web-stdout.conf
+Jul  2 17:01:02 ip-172-31-81-32 run-parts[3080]: (/etc/cron.hourly) finished cron.logrotate.elasticbeanstalk.web-stdout.conf
+Jul  2 17:01:02 ip-172-31-81-32 CROND[3079]: (root) CMDEND (run-parts /etc/cron.hourly)
+Jul  2 17:10:01 ip-172-31-81-32 CROND[3469]: (root) CMD (/opt/elasticbeanstalk/bin/publishlogs -type publish)
+Jul  2 17:10:01 ip-172-31-81-32 CROND[3468]: (root) CMDEND (/opt/elasticbeanstalk/bin/publishlogs -type publish)
+Jul  2 17:28:01 ip-172-31-81-32 anacron[3091]: Job `cron.daily' started
+Jul  2 17:28:01 ip-172-31-81-32 anacron[3091]: Job `cron.daily' terminated
+Jul  2 17:30:01 ip-172-31-81-32 CROND[4175]: (root) CMD (/opt/elasticbeanstalk/bin/publishlogs -type publish)
+Jul  2 17:30:01 ip-172-31-81-32 CROND[4174]: (root) CMDEND (/opt/elasticbeanstalk/bin/publishlogs -type publish)
