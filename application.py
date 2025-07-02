@@ -9,7 +9,7 @@ application=Flask(__name__)
 app=application
 
 ## Route for the home page 
-@app.route('/',methods=['GET'])
+@app.route('/')
 def index():
     return render_template('index.html')
 
