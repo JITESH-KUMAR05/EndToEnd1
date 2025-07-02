@@ -7,6 +7,7 @@ requires-python = ">=3.11"
 dependencies = [
     "catboost>=1.2.8",
     "dill>=0.4.0",
+    "flask>=3.1.1",
     "ipykernel>=6.29.5",
     "numpy>=2.3.1",
     "pandas>=2.3.0",
@@ -20,6 +21,7 @@ dev = [
     "catboost>=1.2.8",
     "dill>=0.4.0",
     "endtoendmlproject",
+    "flask>=3.1.1",
     "ipykernel>=6.29.5",
     "numpy>=2.3.1",
     "pandas>=2.3.0",

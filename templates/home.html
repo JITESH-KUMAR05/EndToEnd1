@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Home</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>
+          <i class="fas fa-graduation-cap"></i> Student Performance Predictor
+        </h1>
+        <p>
+          AI-powered math score prediction based on student demographics and
+          test scores
+        </p>
+      </div>
+
+      <div class="form-container">
+        <div class="info-cards">
+          <div class="info-card">
+            <i class="fas fa-chart-line"></i>
+            <h4>Accurate Predictions</h4>
+            <p>Machine learning powered</p>
+          </div>
+          <div class="info-card">
+            <i class="fas fa-users"></i>
+            <h4>Demographic Analysis</h4>
+            <p>Considers multiple factors</p>
+          </div>
+          <div class="info-card">
+            <i class="fas fa-brain"></i>
+            <h4>Smart Algorithm</h4>
+            <p>Advanced regression model</p>
+          </div>
+        </div>
+
+        <form
+          action="{{url_for('predict_datapoint')}}"
+          method="post"
+          id="predictionForm"
+        >
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="gender">
+                <i class="fas fa-venus-mars"></i>
+                Gender
+              </label>
+              <select name="gender" id="gender" class="form-control" required>
+                <option value="" selected disabled class="placeholder">
+                  Select your Gender
+                </option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="ethnicity">
+                <i class="fas fa-globe"></i>
+                Race or Ethnicity
+              </label>
+              <select
+                class="form-control"
+                name="ethnicity"
+                id="ethnicity"
+                required
+              >
+                <option class="placeholder" selected disabled value="">
+                  Select Ethnicity
+                </option>
+                <option value="group A">Group A</option>
+                <option value="group B">Group B</option>
+                <option value="group C">Group C</option>
+                <option value="group D">Group D</option>
+                <option value="group E">Group E</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="parental_level_of_education">
+                <i class="fas fa-user-graduate"></i>
+                Parental Level of Education
+              </label>
+              <select
+                class="form-control"
+                name="parental_level_of_education"
+                id="parental_level_of_education"
+                required
+              >
+                <option class="placeholder" selected disabled value="">
+                  Select Parent Education
+                </option>
+                <option value="associate's degree">Associate's Degree</option>
+                <option value="bachelor's degree">Bachelor's Degree</option>
+                <option value="high school">High School</option>
+                <option value="master's degree">Master's Degree</option>
+                <option value="some college">Some College</option>
+                <option value="some high school">Some High School</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="lunch">
+                <i class="fas fa-utensils"></i>
+                Lunch Type
+              </label>
+              <select class="form-control" name="lunch" id="lunch" required>
+                <option class="placeholder" selected disabled value="">
+                  Select Lunch Type
+                </option>
+                <option value="free/reduced">Free/Reduced</option>
+                <option value="standard">Standard</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="test_preparation_course">
+                <i class="fas fa-book-open"></i>
+                Test Preparation Course
+              </label>
+              <select
+                class="form-control"
+                name="test_preparation_course"
+                id="test_preparation_course"
+                required
+              >
+                <option class="placeholder" selected disabled value="">
+                  Select Test Course
+                </option>
+                <option value="none">None</option>
+                <option value="completed">Completed</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="reading_score">
+                <i class="fas fa-book"></i>
+                Reading Score (0-100)
+              </label>
+              <input
+                class="form-control"
+                type="number"
+                name="reading_score"
+                id="reading_score"
+                placeholder="Enter your Reading score"
+                min="0"
+                max="100"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="writing_score">
+                <i class="fas fa-pen"></i>
+                Writing Score (0-100)
+              </label>
+              <input
+                class="form-control"
+                type="number"
+                name="writing_score"
+                id="writing_score"
+                placeholder="Enter your Writing Score"
+                min="0"
+                max="100"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="submit-container">
+            <button class="btn-predict" type="submit">
+              <i class="fas fa-calculator"></i>
+              Predict Math Score
+            </button>
+          </div>
+        </form>
+
+        <div class="loading" id="loading">
+          <div class="spinner"></div>
+          <p>Analyzing data and predicting your math score...</p>
+        </div>
+
+        {% if results %}
+        <div class="result-container show">
+          <h3><i class="fas fa-trophy"></i> Prediction Result</h3>
+          <div class="result-score">{{results}}</div>
+          <p class="result-text">Predicted Math Score out of 100</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <script>
+      // Add loading animation
+      document
+        .getElementById("predictionForm")
+        .addEventListener("submit", function (e) {
+          document.getElementById("loading").style.display = "block";
+          document.querySelector(".btn-predict").disabled = true;
+          document.querySelector(".btn-predict").innerHTML =
+            '<i class="fas fa-spinner fa-spin"></i> Predicting...';
+        });
+
+      // Add input validation and styling
+      document.querySelectorAll(".form-control").forEach(function (element) {
+        element.addEventListener("focus", function () {
+          this.parentNode.classList.add("focused");
+        });
+
+        element.addEventListener("blur", function () {
+          this.parentNode.classList.remove("focused");
+        });
+      });
+
+      // Number input validation
+      document
+        .querySelectorAll('input[type="number"]')
+        .forEach(function (input) {
+          input.addEventListener("input", function () {
+            if (this.value < 0) this.value = 0;
+            if (this.value > 100) this.value = 100;
+          });
+        });
+    </script>
+  </body>
+</html>
