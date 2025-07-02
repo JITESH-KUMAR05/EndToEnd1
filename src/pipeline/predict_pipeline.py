@@ -10,31 +10,51 @@ class PredictPipeline:
 
     def predict(self, features):
         try:
+            # Try different path approaches
             model_path = 'artifacts/model.pkl'
             preprocessor_path = 'artifacts/preprocessor.pkl'
             
-            # Check if files exist
-            if not os.path.exists(model_path) or not os.path.exists(preprocessor_path):
-                print("Model files not found, using fallback prediction")
-                # Simple fallback based on reading and writing scores
-                avg_score = (features.iloc[0]['reading_score'] + features.iloc[0]['writing_score']) / 2
-                return [round(avg_score, 2)]
+            # Debug: Print current working directory and check file existence
+            print(f"Current working directory: {os.getcwd()}")
+            print(f"Model file exists: {os.path.exists(model_path)}")
+            print(f"Preprocessor file exists: {os.path.exists(preprocessor_path)}")
             
+            # List all files in current directory
+            print("Files in current directory:")
+            for item in os.listdir('.'):
+                print(f"  {item}")
+            
+            # Check if artifacts folder exists
+            if os.path.exists('artifacts'):
+                print("Contents of artifacts folder:")
+                for item in os.listdir('artifacts'):
+                    print(f"  artifacts/{item}")
+            else:
+                print("❌ Artifacts folder does not exist!")
+                raise FileNotFoundError("Artifacts folder not found")
+            
+            # Load the actual trained model and preprocessor
             model = load_object(file_path=model_path)
             preprocessor = load_object(file_path=preprocessor_path)
+            
+            print(f"✅ Model loaded successfully: {type(model)}")
+            print(f"✅ Preprocessor loaded successfully: {type(preprocessor)}")
+            
+            # Make actual prediction using your trained model
             data_scaled = preprocessor.transform(features)
             preds = model.predict(data_scaled)
             rounded_preds = [round(pred, 2) for pred in preds]
+            
+            print(f"✅ Prediction successful: {rounded_preds}")
             return rounded_preds
             
         except Exception as e:
-            print(f"Prediction error: {str(e)}")
-            # Fallback calculation
-            try:
-                avg_score = (features.iloc[0]['reading_score'] + features.iloc[0]['writing_score']) / 2
-                return [round(avg_score, 2)]
-            except:
-                return [75.0]  # Ultimate fallback
+            print(f"🔴 Error in prediction: {str(e)}")
+            print(f"🔴 Error type: {type(e).__name__}")
+            
+            # Only use fallback if absolutely necessary
+            print("⚠️  Using fallback prediction - MODEL NOT LOADED!")
+            raise CustomException(e, sys)
 
 
 class CustomData:
