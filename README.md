@@ -331,13 +331,35 @@ The system automatically selects the best performing model based on R² score:
 
 ## 📞 Contact & Support
 
-**Author**: Jitesh Kumar 
-**Email**: jitesh.kumar05official@gmail.com
-**LinkedIn**: https://www.linkedin.com/in/jiteshkumar05/
-**GitHub**: https://github.com/JITESH-KUMAR05
+<div align="center">
+
+### 👨‍💻 **Jitesh Kumar**
+
+[![Email](https://img.shields.io/badge/Email-jitesh.kumar05official%40gmail.com-red?style=for-the-badge&logo=gmail&logoColor=white)](mailto:jitesh.kumar05official@gmail.com)
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Jitesh%20Kumar-blue?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/jiteshkumar05/)
+
+[![GitHub](https://img.shields.io/badge/GitHub-JITESH--KUMAR05-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/JITESH-KUMAR05)
 
 ---
 
-⭐ **If you found this project helpful, please give it a star!**
+### 🌟 **Show Your Support**
 
-This project represents my journey into practical machine learning engineering, demonstrating the complete lifecycle from data to production deployment.
+If you found this project helpful, please give it a ⭐!
+
+[![GitHub stars](https://img.shields.io/github/stars/JITESH-KUMAR05/studentperformance?style=social)](https://github.com/JITESH-KUMAR05/studentperformance)
+[![GitHub forks](https://img.shields.io/github/forks/JITESH-KUMAR05/studentperformance?style=social)](https://github.com/JITESH-KUMAR05/studentperformance)
+
+</div>
+
+---
+
+<div align="center">
+
+### 💡 **About This Project**
+
+*This project represents my journey into practical machine learning engineering, demonstrating the complete lifecycle from data to production deployment.*
+
+**🚀 From Data Science to Production • 🤖 ML Engineering • ☁️ AWS Deployment**
+
+</div>
