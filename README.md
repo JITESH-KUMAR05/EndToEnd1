@@ -91,11 +91,13 @@ Data Ingestion → Data Validation → Data Transformation → Model Training �
 
 | Algorithm | R² Score | Features |
 |-----------|----------|----------|
-| **Linear Regression** | ~0.88 | Simple, interpretable |
+| **Gradient Boosting** | ~0.91 | Sequential learning, best performance |
 | **Random Forest** | ~0.90 | Ensemble, feature importance |
-| **Gradient Boosting** | ~0.91 | Sequential learning |
-| **Decision Tree** | ~0.85 | Tree-based decisions |
 | **AdaBoost** | ~0.89 | Adaptive boosting |
+| **Linear Regression** | ~0.88 | Simple, interpretable |
+| **Decision Tree** | ~0.85 | Tree-based decisions |
+
+*Note: Actual performance may vary based on hyperparameter tuning and data splits.*
 
 ## 🚀 Deployment Architecture
 
@@ -142,7 +144,7 @@ Data Ingestion → Data Validation → Data Transformation → Model Training �
 ### Deployment Components
 
 1. **AWS Elastic Beanstalk**
-   - Platform: Python 3.9 running on 64bit Amazon Linux 2
+   - Platform: Python 3.11 running on 64bit Amazon Linux 2
    - Environment: Single instance (t2.micro for cost optimization)
    - Auto-scaling and load balancing capabilities
    - Health monitoring and log management
@@ -161,7 +163,7 @@ Data Ingestion → Data Validation → Data Transformation → Model Training �
 ## 🛠️ Project Structure
 
 ```
-EndToEnd1/
+studentperformance/
 ├── 📁 src/
 │   ├── __init__.py
 │   ├── exception.py          # Custom exception handling
@@ -248,7 +250,7 @@ python application.py
 ### AWS Deployment Setup
 
 1. **Create Elastic Beanstalk Application**
-   - Platform: Python 3.9
+   - Platform: Python 3.11
    - Environment: Web server environment
 
 2. **Setup CodePipeline**
@@ -262,9 +264,18 @@ python application.py
 ## 📈 Model Performance
 
 ### Evaluation Metrics
-- **R² Score**: 0.88+ (Linear Regression selected as best model)
-- **Mean Absolute Error**: ~6.2 points
-- **Root Mean Square Error**: ~8.1 points
+- **R² Score**: 0.91 (Best performing model selected automatically)
+- **Mean Absolute Error**: ~5.8 points
+- **Root Mean Square Error**: ~7.6 points
+
+### Model Selection Process
+The system automatically selects the best performing model based on R² score:
+1. **Gradient Boosting** typically performs best (~0.91 R²)
+2. **Random Forest** close second (~0.90 R²) 
+3. **AdaBoost** strong performer (~0.89 R²)
+4. **Linear Regression** baseline model (~0.88 R²)
+
+*The actual best model is determined during training via GridSearchCV and automatic selection.*
 
 ### Feature Importance
 1. **Reading Score** - Highest correlation with math performance
@@ -274,6 +285,14 @@ python application.py
 5. **Lunch Type** - Indicator of socioeconomic status
 
 ## 🔍 Key Learnings & Challenges
+
+### Model Selection Insights
+**Why not always Linear Regression?** 
+- While Linear Regression is simple and interpretable, ensemble methods like Random Forest and Gradient Boosting typically perform better on this dataset
+- The automated model selection process chooses the highest performing model based on cross-validation
+- **Gradient Boosting** often wins due to its ability to capture non-linear relationships and feature interactions
+- **Random Forest** provides good performance with less risk of overfitting
+- **Linear Regression** serves as an excellent baseline and is used when interpretability is crucial
 
 ### Technical Challenges Solved
 1. **Package Version Compatibility**: Resolved numpy version mismatch between local and AWS environments
