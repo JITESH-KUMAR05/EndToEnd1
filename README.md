@@ -216,7 +216,7 @@ EndToEnd1/
 1. **Clone the repository**
 ```bash
 git clone <repository-url>
-cd EndToEnd1
+cd studentperformance
 ```
 
 2. **Create virtual environment**
@@ -312,10 +312,10 @@ python application.py
 
 ## 📞 Contact & Support
 
-**Author**: [Your Name]  
-**Email**: [Your Email]  
-**LinkedIn**: [Your LinkedIn]  
-**GitHub**: [Your GitHub]
+**Author**: Jitesh Kumar 
+**Email**: jitesh.kumar05official@gmail.com
+**LinkedIn**: https://www.linkedin.com/in/jiteshkumar05/
+**GitHub**: https://github.com/JITESH-KUMAR05
 
 ---
 
