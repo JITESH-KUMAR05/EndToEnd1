@@ -38,7 +38,7 @@ jobs:
       - name: install utilities
         run: |
           sudo apt-get update
-          suo apt-get install -y jq unzip
+          sudo apt-get install -y jq unzip
 
 
       - name: Configure AWS credentials
@@ -66,7 +66,7 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
-    Continious-Deployment:
+    Continuous-Deployment:
       needs: build-and-push-ecr-image
       runs-on: self-hosted
       steps:
@@ -95,7 +95,7 @@ jobs:
 
         - name: Run Docker Image to serve users
           run: |
-            docker run -d -p 8080:8080 --ipc="host" --name=mltest -e  'AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID}}' -e 'AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY}}' -e 'AWS_REGION=${{ secrets.AWS_REGION }}'  ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+            docker run -d -p 5000:5000 --ipc="host" --name=mltest -e  'AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID}}' -e 'AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY}}' -e 'AWS_REGION=${{ secrets.AWS_REGION }}'  ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
           
         - name: Clean previous images and containers
           run: |
