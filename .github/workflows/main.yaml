@@ -50,6 +50,12 @@ jobs:
             id: login-ecr
             uses: aws-actions/amazon-ecr-login@v1
           
+          - name: Debug ECR info
+            run: |
+              echo "ECR Registry: ${{ steps.login-ecr.outputs.registry }}"
+              echo "ECR Repository: ${{ secrets.ECR_REPOSITORY_NAME }}"
+              echo "Full image path: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest"
+          
           - name: Build, tag, and push image to Amazon ECR
             id: build-image
             env:
