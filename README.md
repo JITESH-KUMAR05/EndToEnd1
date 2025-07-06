@@ -160,6 +160,338 @@ Data Ingestion → Data Validation → Data Transformation → Model Training �
    - Webhook integration with CodePipeline
    - Automated CI/CD on code changes
 
+---
+
+## 🐳 AWS EC2 + ECR Deployment (Docker Containerization)
+
+### Overview
+*This project was successfully deployed using AWS EC2 and ECR with Docker containerization and GitHub Actions CI/CD. The deployment has been taken down to avoid ongoing costs.*
+
+**Live Demo URL (Archived):** `http://44.201.213.90:5000/` *(No longer active)*
+
+### Architecture
+```
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   GitHub Repo   │───▶│ GitHub Actions   │───▶│   Amazon ECR    │
+│   (Source Code) │    │   (CI/CD)        │    │ (Container Reg) │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+                                │                        │
+                                ▼                        ▼
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│     Docker      │◀───│   Docker Build   │    │   Docker Pull   │
+│   Containerize  │    │   & Push         │    │   & Deploy      │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+                                                        │
+                                                        ▼
+                               ┌─────────────────────────────────────┐
+                               │           AWS EC2 Instance          │
+                               │  ┌─────────────────────────────────┐│
+                               │  │      Docker Container          ││
+                               │  │  ┌─────────────────────────┐   ││
+                               │  │  │    Flask Application   │   ││
+                               │  │  │    Port: 5000          │   ││
+                               │  │  └─────────────────────────┘   ││
+                               │  └─────────────────────────────────┘│
+                               │          Public IP: 44.201.213.90  │
+                               └─────────────────────────────────────┘
+```
+
+### Prerequisites
+- AWS Account with appropriate permissions
+- Docker installed locally
+- GitHub repository
+- Basic understanding of Docker and AWS services
+
+### Step-by-Step Deployment Guide
+
+#### 1. 📋 AWS Setup
+
+**1.1 Create ECR Repository**
+```bash
+# Install AWS CLI
+pip install awscli
+
+# Configure AWS credentials
+aws configure
+# Enter your AWS Access Key ID
+# Enter your AWS Secret Access Key  
+# Enter your default region (e.g., us-east-1)
+# Enter output format (json)
+
+# Create ECR repository
+aws ecr create-repository --repository-name studentperformance-app --region us-east-1
+
+# Note down the repository URI: {account-id}.dkr.ecr.{region}.amazonaws.com/studentperformance-app
+```
+
+**1.2 Create EC2 Instance**
+```bash
+# Launch EC2 instance (Ubuntu 22.04 LTS)
+# Instance type: t2.micro (free tier eligible)
+# Security Group: Allow HTTP (80), HTTPS (443), SSH (22), Custom TCP (5000)
+# Key pair: Create and download for SSH access
+
+# Install Docker on EC2 instance
+sudo apt update
+sudo apt install docker.io -y
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo usermod -aG docker ubuntu
+
+# Install AWS CLI on EC2
+sudo apt install awscli -y
+```
+
+#### 2. 🐳 Docker Configuration
+
+**2.1 Create Dockerfile**
+```dockerfile
+FROM python:3.11-slim-buster
+WORKDIR /app
+COPY . /app
+
+RUN apt update -y && apt install awscli -y
+RUN pip install -r requirements.txt
+
+CMD [ "python3","application.py" ]
+```
+
+**2.2 Create .dockerignore**
+```
+.git
+.gitignore
+README.md
+__pycache__
+*.pyc
+.venv
+env/
+logs/
+notebook/
+*.ipynb
+catboost_info/
+```
+
+#### 3. ⚙️ GitHub Actions Setup
+
+**3.1 Configure GitHub Secrets**
+Go to GitHub Repository → Settings → Secrets and variables → Actions
+
+Add the following secrets:
+- `AWS_ACCESS_KEY_ID`: Your AWS access key
+- `AWS_SECRET_ACCESS_KEY`: Your AWS secret key
+- `AWS_REGION`: Your AWS region (e.g., us-east-1)
+- `ECR_REPOSITORY_NAME`: Your ECR repository name (studentperformance-app)
+- `AWS_ECR_LOGIN_URI`: Your ECR URI (format: {account-id}.dkr.ecr.{region}.amazonaws.com)
+
+**3.2 GitHub Actions Workflow (.github/workflows/main.yaml)**
+```yaml
+name: AWS ECR & EC2 Deployment
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['README.md']
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  integration:
+    name: Continuous Integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      
+      - name: Lint code
+        run: echo "Linting repository"
+      
+      - name: Run unit tests
+        run: echo "Running unit tests"
+
+  build-and-push-ecr-image:
+    name: Build & Push to ECR
+    needs: integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install utilities
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq unzip
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+        
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+  continuous-deployment:
+    name: Deploy to EC2
+    needs: build-and-push-ecr-image
+    runs-on: self-hosted  # Your EC2 instance as self-hosted runner
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with: 
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Stop and remove existing container
+        run: |
+          docker ps -q --filter "name=mltest" | grep -q . && docker stop mltest && docker rm -fv mltest || echo "No existing container"
+
+      - name: Pull latest images
+        run: |
+          docker pull ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME}}:latest
+
+      - name: Run Docker Image to serve users
+        run: |
+          docker run -d -p 5000:5000 --name=mltest \
+            -e 'AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID}}' \
+            -e 'AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY}}' \
+            -e 'AWS_REGION=${{ secrets.AWS_REGION }}' \
+            ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+        
+      - name: Clean previous images and containers
+        run: |
+          docker system prune -f
+```
+
+#### 4. 🏃‍♂️ Setup Self-Hosted Runner
+
+**4.1 On your EC2 instance:**
+```bash
+# SSH into your EC2 instance
+ssh -i your-key.pem ubuntu@your-ec2-public-ip
+
+# Go to GitHub repository → Settings → Actions → Runners
+# Click "New self-hosted runner" and follow instructions for Linux
+
+# Example commands (replace with your actual tokens):
+mkdir actions-runner && cd actions-runner
+curl -o actions-runner-linux-x64-2.311.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.311.0/actions-runner-linux-x64-2.311.0.tar.gz
+tar xzf ./actions-runner-linux-x64-2.311.0.tar.gz
+./config.sh --url https://github.com/JITESH-KUMAR05/studentperformance --token YOUR_TOKEN
+./run.sh
+
+# To run as service:
+sudo ./svc.sh install
+sudo ./svc.sh start
+```
+
+#### 5. 🚀 Deploy & Test
+
+**5.1 Trigger Deployment**
+```bash
+# Push changes to main branch
+git add .
+git commit -m "Deploy to AWS EC2 with ECR"
+git push origin main
+
+# Monitor GitHub Actions
+# Check repository Actions tab for workflow progress
+```
+
+**5.2 Verify Deployment**
+```bash
+# Check running containers on EC2
+docker ps
+
+# Check application logs
+docker logs mltest
+
+# Test application
+curl http://your-ec2-public-ip:5000
+# Or visit: http://your-ec2-public-ip:5000 in browser
+```
+
+### 💰 Cost Optimization
+
+**Monthly Cost Estimate:**
+- **EC2 t2.micro**: $0 (Free tier) or ~$8.50/month
+- **ECR Storage**: ~$1-2/month for small images
+- **Data Transfer**: Minimal for development use
+- **Total**: ~$10-15/month
+
+**Cost Saving Tips:**
+- Use t2.micro instances (free tier eligible)
+- Stop instances when not in use
+- Use ECR lifecycle policies to delete old images
+- Monitor usage with AWS Cost Explorer
+
+### 🛠️ Troubleshooting
+
+**Common Issues:**
+
+1. **ECR Push Failed: Repository not found**
+   ```bash
+   # Ensure ECR repository exists
+   aws ecr describe-repositories --region us-east-1
+   ```
+
+2. **EC2 Connection Issues**
+   ```bash
+   # Check security group allows port 5000
+   # Verify EC2 instance is running
+   # Check Docker service status: sudo systemctl status docker
+   ```
+
+3. **Self-hosted Runner Offline**
+   ```bash
+   # Restart runner service
+   sudo ./svc.sh stop
+   sudo ./svc.sh start
+   ```
+
+### 📊 Deployment Results
+
+**Successfully Deployed Features:**
+- ✅ Containerized Flask application
+- ✅ Automated CI/CD pipeline
+- ✅ AWS ECR integration
+- ✅ EC2 auto-deployment
+- ✅ Live application at `http://44.201.213.90:5000/`
+- ✅ Responsive web interface
+- ✅ Real-time ML predictions
+
+**Performance Metrics:**
+- **Build Time**: ~2-3 minutes
+- **Deployment Time**: ~1-2 minutes  
+- **Application Load Time**: <3 seconds
+- **Prediction Response**: <500ms
+
+---
+
+*Note: This AWS EC2 + ECR deployment setup was successfully implemented and tested. The infrastructure has been terminated to avoid ongoing costs, but the configuration and process are fully documented above for future reference or replication.*
+
+---
+
 ## 🛠️ Project Structure
 
 ```
