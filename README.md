@@ -360,6 +360,6 @@ If you found this project helpful, please give it a ⭐!
 
 *This project represents my journey into practical machine learning engineering, demonstrating the complete lifecycle from data to production deployment.*
 
-**🚀 From Data Science to Production • 🤖 ML Engineering • ☁️ AWS Deployment**
+**From Data Science to Production • 🤖 ML Engineering • ☁️ AWS Deployment**
 
 </div>
