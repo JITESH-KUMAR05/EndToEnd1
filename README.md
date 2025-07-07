@@ -3,6 +3,7 @@
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://python.org)
 [![Flask](https://img.shields.io/badge/Flask-2.3.3-green)](https://flask.palletsprojects.com/)
 [![AWS](https://img.shields.io/badge/AWS-Elastic%20Beanstalk-orange)](https://aws.amazon.com/elasticbeanstalk/)
+[![Azure](https://img.shields.io/badge/Azure-App%20Service-blue)](https://azure.microsoft.com/en-us/services/app-service/)
 [![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.7.0-red)](https://scikit-learn.org/)
 
 ## 📖 Overview
