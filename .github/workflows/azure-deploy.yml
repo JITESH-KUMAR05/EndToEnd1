@@ -27,7 +27,7 @@ jobs:
     - name: 'Build and push Docker image'
       run: |
         docker build . -t testdockerjitesh.azurecr.io/studentperformance:${{ github.sha }}
-        docker tag testdockerjitesh.azurecr.io/studentperformance:${{ github.sha }} testdockerjitesh.azurecr.io/studentperformance:latest
+        docker build . -t testdockerjitesh.azurecr.io/studentperformance:latest
         docker push testdockerjitesh.azurecr.io/studentperformance:${{ github.sha }}
         docker push testdockerjitesh.azurecr.io/studentperformance:latest
 
