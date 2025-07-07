@@ -26,9 +26,7 @@ jobs:
 
     - name: 'Build and push Docker image'
       run: |
-        docker build . -t testdockerjitesh.azurecr.io/studentperformance:${{ github.sha }}
         docker build . -t testdockerjitesh.azurecr.io/studentperformance:latest
-        docker push testdockerjitesh.azurecr.io/studentperformance:${{ github.sha }}
         docker push testdockerjitesh.azurecr.io/studentperformance:latest
 
     - name: 'Deploy to Azure App Service'
